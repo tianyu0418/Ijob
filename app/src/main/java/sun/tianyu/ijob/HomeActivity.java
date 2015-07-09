@@ -32,6 +32,7 @@ public class HomeActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    // Comit Test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
