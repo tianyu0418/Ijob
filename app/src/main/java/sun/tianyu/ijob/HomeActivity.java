@@ -26,6 +26,7 @@ public class HomeActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private boolean PRIVATE = false;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -36,6 +37,9 @@ public class HomeActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (PRIVATE) {
+            finish();
+        }
         setContentView(R.layout.activity_home);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -60,13 +64,19 @@ public class HomeActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_newest);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.title_search);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_look_history);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_apply_history);
+                break;
+            case 5:
+                mTitle = getString(R.string.title_log_in);
                 break;
         }
     }
