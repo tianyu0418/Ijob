@@ -1,5 +1,7 @@
 package sun.tianyu.ijob;
 
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -57,6 +60,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private String[] titleList;
 
     public NavigationDrawerFragment() {
     }
@@ -64,6 +68,13 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        titleList = new String[]{
+                getString(R.string.title_newest),
+                getString(R.string.title_search),
+                getString(R.string.title_look_history),
+                getString(R.string.title_apply_history),
+                getString(R.string.title_log_in)
+        };
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -97,17 +108,14 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
+
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_newest),
-                        getString(R.string.title_search),
-                        getString(R.string.title_look_history),
-                        getString(R.string.title_apply_history),
-                        getString(R.string.title_log_in)
-                }));
+                titleList
+                ));
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }

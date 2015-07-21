@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.couchbase.lite.Attachment;
+import com.couchbase.lite.CouchbaseLiteException;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Document;
+import com.couchbase.lite.LiveQuery;
+import com.couchbase.lite.Manager;
+import com.couchbase.lite.Query;
+import com.couchbase.lite.QueryEnumerator;
+import com.couchbase.lite.QueryRow;
+import com.couchbase.lite.SavedRevision;
+import com.couchbase.lite.UnsavedRevision;
+import com.couchbase.lite.android.AndroidContext;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 
 public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -27,13 +50,14 @@ public class HomeActivity extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private boolean PRIVATE = false;
+    private String DB_NAME = "ijob_db_guest";
+    private String TAG = "STYLOG";
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
 
-    // Comit Test 2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +74,139 @@ public class HomeActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        helloCBL();
     }
+
+    private void helloCBL() {
+        Manager manager = null;
+        Database database = null;
+        try {
+            manager = new Manager(new AndroidContext(this), Manager.DEFAULT_OPTIONS);
+            database = manager.getDatabase(DB_NAME);
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting database", e);
+            return;
+        }
+        // Create the document
+        String documentId = createDocument(database);
+    /* Get and output the contents */
+        outputContents(database, documentId);
+
+    /* Update the document and add an attachment */
+        updateDoc(database, documentId);
+        // Add an attachment
+        addAttachment(database, documentId);
+//    /* Get and output the contents with the attachment */
+//        outputContentsWithAttachment(database, documentId);
+
+
+        // Query all document
+        Query query = database.createAllDocumentsQuery();
+        /*The important thing that is set the docs mode*/
+//        query.setAllDocsMode(Query.AllDocsMode.ONLY_CONFLICTS);
+        QueryEnumerator rows = null;
+        try {
+            rows = query.run();
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+            Log.e("STYLOG", " Exception: "+e);
+        }
+
+        if (rows.getCount() == 0) {
+            return;
+        }
+        Log.e("STYLOG", " Current DB Docment Count: "+ rows.getCount());
+
+        int rowsCount = rows.getCount();
+        for (int i=0; i<rowsCount; i++) {
+            QueryRow row = rows.getRow(i);
+            Document doc = row.getDocument();
+//            Log.e("STYLOG", " Current DB Docs:"+ " i: " + i + "  Doc:" + String.valueOf(doc.getProperties()));
+        }
+
+        for (Iterator<QueryRow> it = rows; it.hasNext(); ) {
+            QueryRow row = it.next();
+            Log.e("STYLOG", "Widget named: "+ row.getKey() + "" + row.getValue());
+        }
+
+    }
+
+    private String createDocument(Database database) {
+        // Create a new document and add data
+        Document document = database.createDocument();
+        String documentId = document.getId();
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("offer_id", "001");
+        map.put("offer_name", "Android Developer");
+
+        try {
+            // Save the properties to the document
+            document.putProperties(map);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+        return documentId;
+    }
+
+    private void outputContents (Database database, String docID) {
+        Document retrievedDocument = database.getDocument(docID);
+        Log.e(TAG, "retrievedDocument=" + String.valueOf(retrievedDocument.getProperties()));
+    }
+
+    private void updateDoc(Database database, String documentId) {
+        Document document = database.getDocument(documentId);
+        try {
+            // Update the document with more data
+            Map<String, Object> updatedProperties = new HashMap<String, Object>();
+            updatedProperties.putAll(document.getProperties());
+            updatedProperties.put("eventDescription", "Everyone is invited!");
+            updatedProperties.put("address", "123 Elm St.");
+            document.putProperties(updatedProperties);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+    }
+
+    private void addAttachment(Database database, String documentId) {
+        Document document = database.getDocument(documentId);
+        try {
+        /* Add an attachment with sample data as POC */
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[]{1, 3, 5, 7});
+            UnsavedRevision revision = document.getCurrentRevision().createRevision();
+            revision.setAttachment("binaryData", "application/octet-stream", inputStream); //MIME type inputStream);
+        /* Save doc & attachment to the local DB */
+            revision.save();
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+
+        //retrieve the attachment
+        Document fetchedSameDoc = database.getExistingDocument(documentId);
+        SavedRevision saved = fetchedSameDoc.getCurrentRevision();
+        // The content of the attachment is a byte[] we created
+        Attachment attach = saved.getAttachment("binaryData");
+        int i = 0;
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(attach.getContent()));
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+        }
+        StringBuffer values = new StringBuffer();
+        while (i++ < 4) {
+            // We knew the size of the byte array
+            // This is the content of the attachment
+            try {
+                values.append(reader.read() + " ");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.e(TAG, "The docID: " + documentId + ", attachment contents was: " + values.toString());
+    }
+
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
