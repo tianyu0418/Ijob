@@ -1,6 +1,7 @@
 package sun.tianyu.ijob;
 
 import android.app.Activity;
+import android.app.Application;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import sun.tianyu.ijob.common.GlobalValues;
+
 
 public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -49,9 +52,9 @@ public class HomeActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private boolean PRIVATE = false;
     private String DB_NAME = "ijob_db_guest";
     private String TAG = "STYLOG";
+    private IjobApplication application;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -61,9 +64,11 @@ public class HomeActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PRIVATE) {
+        application = (IjobApplication)getApplication();
+        if (application.defautValues.PRIVATE) {
             finish();
         }
+
         setContentView(R.layout.activity_home);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -299,8 +304,7 @@ public class HomeActivity extends ActionBarActivity
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
             return rootView;
         }
@@ -308,8 +312,7 @@ public class HomeActivity extends ActionBarActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((HomeActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+            ((HomeActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
 
