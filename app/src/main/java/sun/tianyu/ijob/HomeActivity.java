@@ -2,6 +2,7 @@ package sun.tianyu.ijob;
 
 import android.app.Activity;
 import android.app.Application;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -219,7 +220,6 @@ public class HomeActivity extends ActionBarActivity
         // update the main content by replacing fragments
         switch (position) {
             case 0:
-
                 FragmentManager newestFragment = getSupportFragmentManager();
                 newestFragment.beginTransaction()
                         .replace(R.id.container, NewestFragment.newInstance(position + 1))
@@ -261,6 +261,37 @@ public class HomeActivity extends ActionBarActivity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+    }
+
+    public void setTabs() {
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.removeAllTabs();
+        // Specify that tabs should be displayed in the action bar.
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create a tab listener that is called when the user changes tabs.
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
+
+        // Add 3 tabs, specifying the tab's text and TabListener
+        for (int i = 0; i < 15; i++) {
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setText("Tab " + (i + 1))
+                            .setTabListener(tabListener));
+        }
     }
 
 
