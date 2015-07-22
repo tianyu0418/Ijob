@@ -6,12 +6,9 @@
     <string name="title_apply_history">応募履歴</string>
     <string name="title_look_history">閲覧履歴</string>
     <string name="title_log_in">ログイン</string>
-    
 
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
-
     <string name="action_example">設定</string>
-
-    <string name="action_settings">個人情報設定</string>
+    <string name="action_settings">設定</string>
 </resources>

@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 import sun.tianyu.ijob.common.GlobalValues;
+import sun.tianyu.ijob.controllers.newest.NewestFragment;
 
 
 public class HomeActivity extends ActionBarActivity
@@ -216,10 +217,23 @@ public class HomeActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        switch (position) {
+            case 0:
+
+                FragmentManager newestFragment = getSupportFragmentManager();
+                newestFragment.beginTransaction()
+                        .replace(R.id.container, NewestFragment.newInstance(position + 1))
+                        .commit();
+                break;
+
+            default:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .commit();
+                break;
+        }
+
     }
 
     public void onSectionAttached(int number) {
@@ -256,6 +270,7 @@ public class HomeActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
+            // Section
             getMenuInflater().inflate(R.menu.home, menu);
             restoreActionBar();
             return true;
