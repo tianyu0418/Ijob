@@ -2,6 +2,7 @@ package sun.tianyu.ijob;
 
 import android.app.Activity;
 import android.app.Application;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -38,6 +39,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -95,21 +100,56 @@ public class HomeActivity extends ActionBarActivity
             return;
         }
         // Create the document
-        String documentId = createDocument(database);
+//        String documentId = createDocument(database);
     /* Get and output the contents */
-        outputContents(database, documentId);
+//        outputContents(database, documentId);
 
     /* Update the document and add an attachment */
-        updateDoc(database, documentId);
+//        updateDoc(database, documentId);
         // Add an attachment
-        addAttachment(database, documentId);
+//        addAttachment(database, documentId);
 //    /* Get and output the contents with the attachment */
 //        outputContentsWithAttachment(database, documentId);
 
 
+        outputAllDocs(database);
+
+
+    }
+
+    private String createDocument(Database database) {
+        // Create a new document and add data
+        Document document = database.createDocument();
+        String documentId = document.getId();
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = GregorianCalendar.getInstance();
+        String currentTimeString = dateFormatter.format(calendar.getTime());
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("offer_id", "4");
+        map.put("offer_name", ".NET開発");
+        map.put("offer_type", "4");
+        map.put("created_at", currentTimeString);
+        map.put("offer_info", ".NET経験3年以上。人数2名");
+        map.put("offer_term", "2015年8月 ~ 2016年4月");
+
+        map.put("members", new ArrayList<String>());
+//        if (userId != null)
+//            map.put("owner", "profile:" + userId);
+
+        try {
+            // Save the properties to the document
+            document.putProperties(map);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+        return documentId;
+    }
+
+    private void outputAllDocs (Database database) {
         // Query all document
         Query query = database.createAllDocumentsQuery();
-        /*The important thing that is set the docs mode*/
 //        query.setAllDocsMode(Query.AllDocsMode.ONLY_CONFLICTS);
         QueryEnumerator rows = null;
         try {
@@ -122,38 +162,14 @@ public class HomeActivity extends ActionBarActivity
         if (rows.getCount() == 0) {
             return;
         }
-        Log.e("STYLOG", " Current DB Docment Count: "+ rows.getCount());
+        Log.e("STYLOG", " Current DB Docs Count: "+ rows.getCount());
 
         int rowsCount = rows.getCount();
         for (int i=0; i<rowsCount; i++) {
             QueryRow row = rows.getRow(i);
             Document doc = row.getDocument();
-//            Log.e("STYLOG", " Current DB Docs:"+ " i: " + i + "  Doc:" + String.valueOf(doc.getProperties()));
+            Log.e("STYLOG", " Current DB Docs:"+ " i: " + i + "  Doc:" + String.valueOf(doc.getProperties()));
         }
-
-        for (Iterator<QueryRow> it = rows; it.hasNext(); ) {
-            QueryRow row = it.next();
-            Log.e("STYLOG", "Widget named: "+ row.getKey() + "" + row.getValue());
-        }
-
-    }
-
-    private String createDocument(Database database) {
-        // Create a new document and add data
-        Document document = database.createDocument();
-        String documentId = document.getId();
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("offer_id", "001");
-        map.put("offer_name", "Android Developer");
-
-        try {
-            // Save the properties to the document
-            document.putProperties(map);
-        } catch (CouchbaseLiteException e) {
-            Log.e(TAG, "Error putting", e);
-        }
-        return documentId;
     }
 
     private void outputContents (Database database, String docID) {

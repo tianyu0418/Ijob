@@ -1,6 +1,7 @@
 package sun.tianyu.ijob.common.adview;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -90,7 +91,7 @@ public class CircleFlowIndicator extends View implements FlowIndicator,
     public CircleFlowIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
         // Retrieve styles attributs
-        TypedArray a = context.obtainStyledAttributes(attrs,
+        @SuppressLint("Recycle") TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.CircleFlowIndicator);
 
         // Gets the inactive circle type, defaulting to "fill"
@@ -331,7 +332,7 @@ public class CircleFlowIndicator extends View implements FlowIndicator,
         // Only set the timer if we have a timeout of at least 1 millisecond
         if (fadeOutTime > 0) {
             // Check if we need to create a new timer
-            if (timer == null || timer._run == false) {
+            if (timer == null || !timer._run) {
                 // Create and start a new timer
                 timer = new FadeTimer();
                 timer.execute();

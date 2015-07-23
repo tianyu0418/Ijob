@@ -29,26 +29,22 @@ public class AdView {
     //バナー画像配列
     private ArrayList<String> imageUrlList = new ArrayList<>();
     //リンク先配列
-    ArrayList<String> linkUrlArray= new ArrayList<>();
-    //ヘルプバナーフラグ
-    public static boolean helpbannerFlg = false;
+    private ArrayList<String> linkUrlArray= new ArrayList<>();
     //初期化処理
     private void init(Context cx) {
         context = cx;
     }
-    private static boolean isHelpbannerFlg = false;
 
     /**
      * 初期化
      */
-    public HelpBanner(Context cx) {
+    public AdView(Context cx) {
         init(cx);
         Activity parentActivity = (Activity)cx;
         helpBannerImage = (ViewFlow) parentActivity.findViewById(R.id.helpbannerImage);
         mFlowIndicator = (CircleFlowIndicator) parentActivity.findViewById(R.id.viewflowindic);
         mFlowIndicator.setVisibility(View.INVISIBLE);
         mIndicatorParent = (FrameLayout) parentActivity.findViewById(R.id.indicatorparent);
-        boolean isHelpBannerTap = false;
 
         if(SHOWHELPBANNER == 1){
             helpBannerImage.setVisibility(View.VISIBLE);
@@ -62,13 +58,12 @@ public class AdView {
     /**
      * 初期化
      */
-    public HelpBanner(Context cx, View rootView) {
+    public AdView(Context cx, View rootView) {
         init(cx);
         helpBannerImage = (ViewFlow) rootView.findViewById(R.id.helpbannerImage);
         mFlowIndicator = (CircleFlowIndicator) rootView.findViewById(R.id.viewflowindic);
         mFlowIndicator.setVisibility(View.INVISIBLE);
         mIndicatorParent = (FrameLayout) rootView.findViewById(R.id.indicatorparent);
-        AppDataAdmin.isHelpBannerTap = false;
 
         if(SHOWHELPBANNER == 1){
             helpBannerImage.setVisibility(View.VISIBLE);
@@ -82,21 +77,15 @@ public class AdView {
     /**
      * バナー設定
      */
-    private void setUpBanner(){
-        List<BannerData> banners = AppDataAdmin.bannerDatas;
-        if(banners!=null){
-            for(int i=0;i<banners.size();i++){
-                BannerData banner= banners.get(i);
-                imageUrlList.add(banner.imageUrl);
-                linkUrlArray.add(banner.linkUrl);
-            }
-        }else{
-            imageUrlList.add(AppDataAdmin.myAdViewImageURL);
-            String tempUrl = AppDataAdmin.myAdViewLinkURL + "?" + "OS_NAME=" + "Android" + "&" + "OS_VER="+
-                    AppDataAdmin.androidVersion.replace(".", "") + "&" + "APP_VER="
-                    +Constants.STAGE_AND_DEMO_APPLICATION_VERSION.replace(".", "");
-            linkUrlArray.add(tempUrl);
-        }
+    private void setUpBanner() {
+        imageUrlList.add("http://livedoor.blogimg.jp/geek_sokuho/imgs/b/8/b8af52cf.png");
+        linkUrlArray.add("http://www.google.co.jp");
+        imageUrlList.add("https://upload.wikimedia.org/wikipedia/commons/e/ec/Yahoo_Japan_logo.png");
+        linkUrlArray.add("http://www.yahoo.co.jp");
+        imageUrlList.add("http://www.adsmartonline.com/blog/wp-content/uploads/2013/01/bing.png");
+        linkUrlArray.add("http://www.bing.com");
+
+
     }
     /**
      * バナー非表示設定
@@ -133,11 +122,9 @@ public class AdView {
         helpBannerImage.setFlowIndicator(null);
         setBannerIndicator(true);
         if(imageUrlList.size()>1){
-            if(AppDataAdmin.bannerIndicatorFlg){
-                helpBannerImage.setFlowIndicator(mFlowIndicator);
-            }
+            helpBannerImage.setFlowIndicator(mFlowIndicator);
             helpBannerImage.setSelection(0);
-            helpBannerImage.setTimeSpan(AppDataAdmin.bannerScrollInterval);
+            helpBannerImage.setTimeSpan(5);
             helpBannerImage.startAutoFlowTimer();
         }else{
             helpBannerImage.setCanSwipe(false);
@@ -153,7 +140,6 @@ public class AdView {
             mFlowIndicator.setVisibility(View.INVISIBLE);
             return;
         }
-        if(AppDataAdmin.bannerIndicatorFlg){
             if(imageUrlList.size()>1) {
                 //バナー一枚以上
                 mFlowIndicator.setVisibility(View.VISIBLE);
@@ -161,9 +147,6 @@ public class AdView {
                 //バナー一枚の場合非表示
                 mFlowIndicator.setVisibility(View.INVISIBLE);
             }
-        }else{
-            //システム設定より非表示
-            mFlowIndicator.setVisibility(View.INVISIBLE);
-        }
+
     }
 }

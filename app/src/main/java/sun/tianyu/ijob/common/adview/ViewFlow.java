@@ -410,7 +410,7 @@ public class ViewFlow extends AdapterView<Adapter> {
     protected void onScrollChanged(int h, int v, int oldh, int oldv) {
         if(!mCanSwipe){
             return;
-        };
+        }
         super.onScrollChanged(h, v, oldh, oldv);
 
         if (mIndicator != null) {

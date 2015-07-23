@@ -16,6 +16,7 @@ import android.widget.TextView;
 import sun.tianyu.ijob.HomeActivity;
 import sun.tianyu.ijob.R;
 import sun.tianyu.ijob.common.CommonFragment;
+import sun.tianyu.ijob.common.adview.AdView;
 
 /**
  * Created by Developer on 15/07/22.
@@ -55,6 +56,8 @@ public class NewestFragment extends CommonFragment {
         newestPager = (ViewPager) rootView.findViewById(R.id.newest_pager);
         newestPager.setAdapter(newestPagerAdapter);
         setTab(rootView);
+        AdView adView = new AdView(getActivity(), rootView);
+        adView.setHelpBannerHidden(false);
         return rootView;
     }
 
