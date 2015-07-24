@@ -17,7 +17,6 @@ public class NewestPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int i) {
         Fragment fragment = new NewestPagerFragment();
         Bundle args = new Bundle();
-        // Our object is just an integer :-P
         args.putInt(NewestPagerFragment.CategoryNumberKey, i + 1);
         fragment.setArguments(args);
         return fragment;

@@ -48,6 +48,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import sun.tianyu.ijob.common.DefautValues;
 import sun.tianyu.ijob.common.GlobalValues;
 import sun.tianyu.ijob.controllers.newest.NewestFragment;
 
@@ -59,7 +60,6 @@ public class HomeActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private String DB_NAME = "ijob_db_guest";
     private String TAG = "STYLOG";
     private IjobApplication application;
 
@@ -90,33 +90,11 @@ public class HomeActivity extends ActionBarActivity
     }
 
     private void helloCBL() {
-        Manager manager = null;
-        Database database = null;
-        try {
-            manager = new Manager(new AndroidContext(this), Manager.DEFAULT_OPTIONS);
-            database = manager.getDatabase(DB_NAME);
-        } catch (Exception e) {
-            Log.e(TAG, "Error getting database", e);
-            return;
-        }
-        // Create the document
-//        String documentId = createDocument(database);
-    /* Get and output the contents */
-//        outputContents(database, documentId);
-
-    /* Update the document and add an attachment */
-//        updateDoc(database, documentId);
-        // Add an attachment
-//        addAttachment(database, documentId);
-//    /* Get and output the contents with the attachment */
-//        outputContentsWithAttachment(database, documentId);
-
-
-        outputAllDocs(database);
-
-
+        // Test Code
+        outputAllDocs(((IjobApplication) getApplication()).database);
     }
 
+    // Test Code
     private String createDocument(Database database) {
         // Create a new document and add data
         Document document = database.createDocument();
@@ -134,9 +112,6 @@ public class HomeActivity extends ActionBarActivity
         map.put("offer_info", ".NET経験3年以上。人数2名");
         map.put("offer_term", "2015年8月 ~ 2016年4月");
 
-        map.put("members", new ArrayList<String>());
-//        if (userId != null)
-//            map.put("owner", "profile:" + userId);
 
         try {
             // Save the properties to the document
@@ -150,6 +125,7 @@ public class HomeActivity extends ActionBarActivity
     private void outputAllDocs (Database database) {
         // Query all document
         Query query = database.createAllDocumentsQuery();
+        query.setGroupLevel(2);
 //        query.setAllDocsMode(Query.AllDocsMode.ONLY_CONFLICTS);
         QueryEnumerator rows = null;
         try {
@@ -177,6 +153,7 @@ public class HomeActivity extends ActionBarActivity
         Log.e(TAG, "retrievedDocument=" + String.valueOf(retrievedDocument.getProperties()));
     }
 
+    // Test Code
     private void updateDoc(Database database, String documentId) {
         Document document = database.getDocument(documentId);
         try {
@@ -190,46 +167,6 @@ public class HomeActivity extends ActionBarActivity
             Log.e(TAG, "Error putting", e);
         }
     }
-
-    private void addAttachment(Database database, String documentId) {
-        Document document = database.getDocument(documentId);
-        try {
-        /* Add an attachment with sample data as POC */
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(new byte[]{1, 3, 5, 7});
-            UnsavedRevision revision = document.getCurrentRevision().createRevision();
-            revision.setAttachment("binaryData", "application/octet-stream", inputStream); //MIME type inputStream);
-        /* Save doc & attachment to the local DB */
-            revision.save();
-        } catch (CouchbaseLiteException e) {
-            Log.e(TAG, "Error putting", e);
-        }
-
-        //retrieve the attachment
-        Document fetchedSameDoc = database.getExistingDocument(documentId);
-        SavedRevision saved = fetchedSameDoc.getCurrentRevision();
-        // The content of the attachment is a byte[] we created
-        Attachment attach = saved.getAttachment("binaryData");
-        int i = 0;
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(attach.getContent()));
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
-        StringBuffer values = new StringBuffer();
-        while (i++ < 4) {
-            // We knew the size of the byte array
-            // This is the content of the attachment
-            try {
-                values.append(reader.read() + " ");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.e(TAG, "The docID: " + documentId + ", attachment contents was: " + values.toString());
-    }
-
-
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {

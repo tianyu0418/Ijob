@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,12 +19,12 @@ import com.couchbase.lite.Query;
 import com.couchbase.lite.android.AndroidContext;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import sun.tianyu.ijob.IjobApplication;
 import sun.tianyu.ijob.R;
 import sun.tianyu.ijob.common.CommonFragment;
+import sun.tianyu.ijob.common.DefautValues;
 
 /**
  * Created by Developer on 15/07/22.
@@ -38,8 +37,7 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        // The last two arguments ensure LayoutParams are inflated
-        // properly.
+
         View rootView = inflater.inflate(
                 R.layout.newest_pager_fragment, container, false);
         Bundle args = getArguments();
@@ -52,6 +50,7 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 //                android.R.layout.simple_expandable_list_item_1, members);
 //        listView.setAdapter(adapter);
+
         LiveQuery query = getQuery(getDatabase(), "0").toLiveQuery();
         mListAdapter = new NewestPagerListAdapter(getActivity(), query);
 
@@ -70,6 +69,7 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
     private Query getQuery(Database database, String listDocId) {
         com.couchbase.lite.View view = database.getView("jobs");
         if (view.getMap() == null) {
+            Log.e("STYLOG","Null Null Null Null NUll");
             Mapper map = new Mapper() {
                 @Override
                 public void map(Map<String, Object> document, Emitter emitter) {
@@ -91,17 +91,9 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
         return query;
     }
 
+    // DBインスタンス取得
     private Database getDatabase() {
-        Manager manager = null;
-        Database database = null;
-        try {
-            manager = new Manager(new AndroidContext(getActivity()), Manager.DEFAULT_OPTIONS);
-            database = manager.getDatabase("ijob_db_guest");
-        } catch (Exception e) {
-            Log.e("STYLOG", "Error getting database", e);
-            return null;
-        }
-        return database;
+        return((IjobApplication)getActivity().getApplicationContext()).database;
     }
 
     @Override public void onRefresh() {
@@ -111,4 +103,8 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
             }
         }, 5000);
     }
+
+
+
+
 }
