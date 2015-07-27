@@ -43,6 +43,7 @@ public class NewestPagerListAdapter extends LiveQueryAdapter {
         }
 
         final Document job = (Document) getItem(position);
+//        Log.e("STYLOG","NewestPagerListAdapter  document::: " + String.valueOf(job.getProperties()));
 
         if (job == null || job.getCurrentRevision() == null) {
             return convertView;
@@ -77,8 +78,10 @@ public class NewestPagerListAdapter extends LiveQueryAdapter {
 
 
 
-        TextView text = (TextView) convertView.findViewById(R.id.text);
-        text.setText((String) job.getProperty("offer_name"));
+        TextView titletext = (TextView) convertView.findViewById(R.id.u1_title);
+        titletext.setText(String.valueOf(job.getProperty("offer_name")));
+        TextView infoText = (TextView) convertView.findViewById(R.id.u1_info);
+        infoText.setText(String.valueOf(job.getProperty("offer_info")));
 
             /*
             If there are conflicting revisions, show a conflict icon.

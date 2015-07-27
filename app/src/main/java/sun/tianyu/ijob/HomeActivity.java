@@ -1,59 +1,43 @@
 package sun.tianyu.ijob;
 
 import android.app.Activity;
-import android.app.Application;
-import android.provider.ContactsContract;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-
-import com.couchbase.lite.Attachment;
+import android.widget.Toast;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
-import com.couchbase.lite.LiveQuery;
-import com.couchbase.lite.Manager;
+import com.couchbase.lite.Emitter;
+import com.couchbase.lite.Mapper;
 import com.couchbase.lite.Query;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
-import com.couchbase.lite.SavedRevision;
-import com.couchbase.lite.UnsavedRevision;
-import com.couchbase.lite.android.AndroidContext;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.couchbase.lite.Reducer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import sun.tianyu.ijob.common.DefautValues;
-import sun.tianyu.ijob.common.GlobalValues;
+import sun.tianyu.ijob.common.CommonActivity;
 import sun.tianyu.ijob.controllers.newest.NewestFragment;
 
 
-public class HomeActivity extends ActionBarActivity
+public class HomeActivity extends CommonActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -87,6 +71,26 @@ public class HomeActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         helloCBL();
+    }
+
+    boolean doubleBackToExitPressedOnce;
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "[戻る]をもう一度押すと終了", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 
     private void helloCBL() {
@@ -125,7 +129,6 @@ public class HomeActivity extends ActionBarActivity
     private void outputAllDocs (Database database) {
         // Query all document
         Query query = database.createAllDocumentsQuery();
-        query.setGroupLevel(2);
 //        query.setAllDocsMode(Query.AllDocsMode.ONLY_CONFLICTS);
         QueryEnumerator rows = null;
         try {
@@ -146,6 +149,57 @@ public class HomeActivity extends ActionBarActivity
             Document doc = row.getDocument();
             Log.e("STYLOG", " Current DB Docs:"+ " i: " + i + "  Doc:" + String.valueOf(doc.getProperties()));
         }
+
+        com.couchbase.lite.View phoneView = database.getView("rmb");
+        if (phoneView.getMap() == null) {
+            Mapper map = new Mapper() {
+                @Override
+                public void map(Map<String, Object> document, Emitter emitter) {
+                    java.util.List<String> offerTypes = new ArrayList<>();
+                    offerTypes.add(String.valueOf(document.get("offer_type")));
+                    emitter.emit(offerTypes, document);
+                }
+            };
+            Reducer reduce = new Reducer() {
+                @Override
+                public Object reduce(List<Object> keys, List<Object> values, boolean rereduce) {
+                    for (int i = 0; i < keys.size(); i++) {
+                        if (keys.lastIndexOf(keys.get(i)) == i) {
+                            return keys.lastIndexOf(i);
+                        }
+
+                    }
+                    return null;
+                }
+            };
+            phoneView.setMapReduce(map, reduce, "2");
+
+        }
+
+
+
+//        phoneView.setMapReduce(new Mapper() {
+//            @Override
+//            public void map(Map<String, Object> document, Emitter emitter) {
+//                java.util.List<String> offerTypes = new ArrayList<>();
+//                offerTypes.add(String.valueOf(document.get("offer_type")));
+//                emitter.emit(offerTypes, document);
+//            }
+//        }, new Reducer() {
+//            @Override
+//            public Object reduce(List<Object> keys, List<Object> values, boolean rereduce) {
+//                for(int i = 0; i < keys.size(); i++) {
+//                    if (keys.lastIndexOf(keys.get(i)) == i) {
+//                        return keys.lastIndexOf(i);
+//                    }
+//
+//                }
+//
+//                return null;
+//            }
+//
+//        }, "2");
+
     }
 
     private void outputContents (Database database, String docID) {
@@ -198,13 +252,19 @@ public class HomeActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_search);
                 break;
             case 3:
-                mTitle = getString(R.string.title_look_history);
+                mTitle = getString(R.string.title_bookmark);
                 break;
             case 4:
-                mTitle = getString(R.string.title_apply_history);
+                mTitle = getString(R.string.title_look_history);
                 break;
             case 5:
+                mTitle = getString(R.string.title_apply_history);
+                break;
+            case 6:
                 mTitle = getString(R.string.title_log_in);
+                break;
+            default:
+                mTitle = "";
                 break;
         }
     }
@@ -311,7 +371,7 @@ public class HomeActivity extends ActionBarActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((HomeActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
+            ((HomeActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER, 0));
         }
     }
 

@@ -71,6 +71,7 @@ public class NavigationDrawerFragment extends Fragment {
         titleList = new String[]{
                 getString(R.string.title_newest),
                 getString(R.string.title_search),
+                getString(R.string.title_bookmark),
                 getString(R.string.title_look_history),
                 getString(R.string.title_apply_history),
                 getString(R.string.title_log_in)
@@ -109,12 +110,24 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
+        final TypedArray typedArray = getResources().obtainTypedArray(R.array.sections_icons);
+
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 titleList
-                ));
+                ){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                int resourceId = typedArray.getResourceId(position, 0);
+                Drawable drawable = getResources().getDrawable(resourceId);
+                ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                return v;
+            }
+
+        });
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

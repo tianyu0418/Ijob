@@ -48,10 +48,8 @@ public class AdView {
 
         if(SHOWHELPBANNER == 1){
             helpBannerImage.setVisibility(View.VISIBLE);
-            //li add start
             setUpBanner();
             initBanner(imageUrlList);
-            //li add end
         }
     }
 
@@ -78,8 +76,8 @@ public class AdView {
      * バナー設定
      */
     private void setUpBanner() {
-        imageUrlList.add("http://livedoor.blogimg.jp/geek_sokuho/imgs/b/8/b8af52cf.png");
-        linkUrlArray.add("http://www.google.co.jp");
+//        imageUrlList.add("http://static.wixstatic.com/media/da90ae_26b8786811c14c5aa323cf20bb119360.png_srb_p_170_84_75_22_0.50_1.20_0.00_png_srb");
+//        linkUrlArray.add("http://www.sundata-service.com/#!about/c4nz");
         imageUrlList.add("https://upload.wikimedia.org/wikipedia/commons/e/ec/Yahoo_Japan_logo.png");
         linkUrlArray.add("http://www.yahoo.co.jp");
         imageUrlList.add("http://www.adsmartonline.com/blog/wp-content/uploads/2013/01/bing.png");
@@ -147,6 +145,5 @@ public class AdView {
                 //バナー一枚の場合非表示
                 mFlowIndicator.setVisibility(View.INVISIBLE);
             }
-
     }
 }

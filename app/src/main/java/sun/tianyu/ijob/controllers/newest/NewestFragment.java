@@ -56,8 +56,8 @@ public class NewestFragment extends CommonFragment {
         newestPager = (ViewPager) rootView.findViewById(R.id.newest_pager);
         newestPager.setAdapter(newestPagerAdapter);
         setTab(rootView);
-//        AdView adView = new AdView(getActivity(), rootView);
-//        adView.setHelpBannerHidden(false);
+        AdView adView = new AdView(getActivity(), rootView);
+        adView.setHelpBannerHidden(false);
         return rootView;
     }
 

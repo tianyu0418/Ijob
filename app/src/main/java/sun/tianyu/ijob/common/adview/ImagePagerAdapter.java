@@ -3,7 +3,6 @@ package sun.tianyu.ijob.common.adview;
 /**
  * Created by Developer on 15/07/23.
  */
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,11 +24,6 @@ import java.util.Map;
 import sun.tianyu.ijob.IjobApplication;
 import sun.tianyu.ijob.R;
 
-
-/**
- * @Description: image list adapter
- * @author li.wei
- */
 public class ImagePagerAdapter extends BaseAdapter {
 
     private Context context;
@@ -85,7 +79,6 @@ public class ImagePagerAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        //li add start
         int imgPos = ImagePagerAdapter.this.getPosition(position);
         if(imageIdList.size()-1 < imgPos){
             imgPos = 0;
@@ -95,7 +88,6 @@ public class ImagePagerAdapter extends BaseAdapter {
         Bitmap mBanner = ((IjobApplication) context.getApplicationContext()).mImageCache.getBitmap(adImageUrl);
         if (mBanner != null) {
             holder.imageView.setBackgroundDrawable(new BitmapDrawable(mBanner));
-            //isHelpBannerLocal = false;
         } else {
             ImageRequest re;
             final String imageUrl = adImageUrl;
@@ -160,6 +152,8 @@ public class ImagePagerAdapter extends BaseAdapter {
      */
     public ImagePagerAdapter setInfiniteLoop(boolean isInfiniteLoop) {
         this.isInfiniteLoop = isInfiniteLoop;
+
+
         return this;
     }
 
