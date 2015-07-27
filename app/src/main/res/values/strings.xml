@@ -18,7 +18,7 @@
 
 
     <string-array name="sections_icons">
-        <item>@android:drawable/</item>
+        <item>@android:drawable/ic_menu_search</item>
         <item>@android:drawable/ic_menu_search</item>
         <item>@android:drawable/ic_menu_save</item>
         <item>@android:drawable/ic_btn_speak_now</item>
