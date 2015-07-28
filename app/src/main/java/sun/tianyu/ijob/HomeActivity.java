@@ -3,7 +3,6 @@ package sun.tianyu.ijob;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,6 +34,7 @@ import java.util.Map;
 
 import sun.tianyu.ijob.common.CommonActivity;
 import sun.tianyu.ijob.controllers.newest.NewestFragment;
+import sun.tianyu.ijob.controllers.search.OfferSearchFragment;
 
 
 public class HomeActivity extends CommonActivity
@@ -94,6 +94,7 @@ public class HomeActivity extends CommonActivity
     }
 
     private void helloCBL() {
+//        createAllDocument(((IjobApplication) getApplication()).database);
         // Test Code
         outputAllDocs(((IjobApplication) getApplication()).database);
     }
@@ -101,6 +102,8 @@ public class HomeActivity extends CommonActivity
     // Test Code
     private String createDocument(Database database) {
         // Create a new document and add data
+
+        /*　求人一覧 */
         Document document = database.createDocument();
         String documentId = document.getId();
 
@@ -110,19 +113,121 @@ public class HomeActivity extends CommonActivity
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("offer_id", "4");
+        map.put("doc_type", "1");
         map.put("offer_name", ".NET開発");
         map.put("offer_type", "4");
         map.put("created_at", currentTimeString);
         map.put("offer_info", ".NET経験3年以上。人数2名");
         map.put("offer_term", "2015年8月 ~ 2016年4月");
-
-
         try {
             // Save the properties to the document
             document.putProperties(map);
         } catch (CouchbaseLiteException e) {
             Log.e(TAG, "Error putting", e);
         }
+
+
+        return documentId;
+    }
+
+    // Test Code
+    // DB 初期化
+    private String createAllDocument(Database database) {
+        // Create a new document and add data
+
+        /*　求人一覧 */
+        Document document = database.createDocument();
+        String documentId = document.getId();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = GregorianCalendar.getInstance();
+        String currentTimeString = dateFormatter.format(calendar.getTime());
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("offer_id", "4");
+        map.put("doc_type", "1");
+        map.put("offer_name", ".NET開発");
+        map.put("offer_type", "4");
+        map.put("created_at", currentTimeString);
+        map.put("offer_info", ".NET経験3年以上。人数2名");
+        map.put("offer_term", "2015年8月 ~ 2016年4月");
+        try {
+            // Save the properties to the document
+            document.putProperties(map);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+
+        Document document2 = database.createDocument();
+        String documentId2 = document2.getId();
+        Map<String, Object> map2 = new HashMap<String, Object>();
+        map2.put("offer_id", "1");
+        map2.put("doc_type", "1");
+        map2.put("offer_name", "Android 開発者");
+        map2.put("offer_type", "2");
+        map2.put("created_at", currentTimeString);
+        map2.put("offer_info", "Androidアプリ設計、開発経験1年以上、HTTP通信プロトコル知識が持っている方");
+        map2.put("offer_term", "2015年8月 ~ 2015年12月");
+        try {
+            // Save the properties to the document
+            document2.putProperties(map2);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+
+        Document document3 = database.createDocument();
+        String documentId3 = document3.getId();
+        Map<String, Object> map3 = new HashMap<String, Object>();
+        map3.put("offer_id", "2");
+        map3.put("doc_type", "1");
+        map3.put("offer_name", "Java 開発者");
+        map3.put("offer_type", "1");
+        map3.put("created_at", currentTimeString);
+        map3.put("offer_info", " 開発経験あり、日本語堪能の方、50万から");
+        map3.put("offer_term", "2015年8月 ~ 2015年12月");
+        try {
+            // Save the properties to the document
+            document3.putProperties(map3);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+
+        Document document4 = database.createDocument();
+        String documentId4 = document4.getId();
+
+
+        Map<String, Object> map4 = new HashMap<String, Object>();
+        map4.put("offer_id", "3");
+        map4.put("doc_type", "1");
+        map4.put("offer_name", "PHP 開発者");
+        map4.put("offer_type", "3");
+        map4.put("created_at", currentTimeString);
+        map4.put("offer_info", "PHP、MySQL、Apache、LDAPの知識、経験必須。人数３名");
+        map4.put("offer_term", "2015年9月 ~ 中長期");
+        try {
+            // Save the properties to the document
+            document4.putProperties(map4);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+
+        Document document5 = database.createDocument();
+        String documentId5 = document5.getId();
+        Map<String, Object> map5 = new HashMap<String, Object>();
+        map5.put("offer_id", "1");
+        map5.put("doc_type", "1");
+        map5.put("offer_name", "iOS 開発者");
+        map5.put("offer_type", "2");
+        map5.put("created_at", currentTimeString);
+        map5.put("offer_info", "iOSアプリ設計、開発経験1年以上");
+        map5.put("offer_term", "2015年8月 ~ 2015年12月");
+        try {
+            // Save the properties to the document
+            document5.putProperties(map5);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+
+
         return documentId;
     }
 
@@ -232,7 +337,10 @@ public class HomeActivity extends CommonActivity
                         .replace(R.id.container, NewestFragment.newInstance(position + 1))
                         .commit();
                 break;
-
+            case 1:
+                FragmentManager offerSearchFragment = getSupportFragmentManager();
+                offerSearchFragment.beginTransaction().replace(R.id.container, OfferSearchFragment.newInstance(position + 1)).commit();
+                break;
             default:
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()

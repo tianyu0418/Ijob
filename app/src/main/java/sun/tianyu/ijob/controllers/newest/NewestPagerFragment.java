@@ -49,8 +49,8 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
         View rootView = inflater.inflate(
                 R.layout.newest_pager_fragment, container, false);
         Bundle args = getArguments();
-        ((TextView) rootView.findViewById(R.id.text1)).setText(
-                Integer.toString(args.getInt(CategoryNumberKey)));
+//        ((TextView) rootView.findViewById(R.id.text1)).setText(
+//                Integer.toString(args.getInt(CategoryNumberKey)));
         categoryNum = args.getInt(CategoryNumberKey, 0);
 
         listView = (ListView)rootView.findViewById(R.id.newest_list);

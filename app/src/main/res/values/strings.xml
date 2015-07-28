@@ -13,16 +13,17 @@
     <string name="action_example">設定</string>
     <string name="action_settings">設定</string>
 
+    <string name="offer_info_title">求人概要</string>
+
     <string name="application">応募する</string>
     <string name="bookmark">検討中リストに追加する</string>
 
-
     <string-array name="sections_icons">
-        <item>@android:drawable/ic_menu_search</item>
+        <item>@android:drawable/ic_menu_today</item>
         <item>@android:drawable/ic_menu_search</item>
         <item>@android:drawable/ic_menu_save</item>
-        <item>@android:drawable/ic_btn_speak_now</item>
-        <item>@android:drawable/ic_btn_speak_now</item>
+        <item>@android:drawable/ic_menu_save</item>
+        <item>@android:drawable/ic_menu_save</item>
         <item>@android:drawable/ic_menu_manage</item>
     </string-array>
 

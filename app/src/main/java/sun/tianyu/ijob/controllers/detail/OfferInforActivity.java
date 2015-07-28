@@ -53,7 +53,7 @@ public class OfferInforActivity extends CommonActivity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("求人詳細");
+        actionBar.setTitle(getResources().getString(R.string.offer_info_title));
 
     }
 

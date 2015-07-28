@@ -29,23 +29,36 @@
     <Button
         android:id="@+id/u2_bookmark"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/center_view"
         android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="3dp"
+        android:textSize="14sp"
+        android:textColor="#f0ffffff"
+        android:background="@drawable/offer_info_button_blue"
         android:text="@string/bookmark" />
 
     <!-- Right -->
     <Button
         android:id="@+id/u2_apply"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_alignLeft="@+id/center_view"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="5dp"
+        android:textSize="17dp"
+        android:textColor="#f0ffffff"
+        android:background="@drawable/offer_info_button_red"
         android:text="@string/application" />
+
 </RelativeLayout>

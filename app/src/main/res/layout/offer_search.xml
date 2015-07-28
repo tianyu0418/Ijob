@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="あいうえお　かきくけこ"
+    />
+
+    <!--技術-->
+
+
+    <!--給与-->
+
+    <!--勤務地-->
+
+    <!--free word-->
+    <RelativeLayout
+        android:id="@+id/u3_search_box_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ddffffff">
+    <EditText
+        android:id="@+id/u3_offer_search_box"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="6dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="8dip"
+        android:padding="5dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionSearch"
+        android:singleLine="true" >
+    </EditText>
+    </RelativeLayout>
+
+</LinearLayout>
