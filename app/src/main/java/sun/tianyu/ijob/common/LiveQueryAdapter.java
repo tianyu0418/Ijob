@@ -37,7 +37,6 @@ public class LiveQueryAdapter extends BaseAdapter {
                 });
             }
         });
-
         query.start();
     }
 

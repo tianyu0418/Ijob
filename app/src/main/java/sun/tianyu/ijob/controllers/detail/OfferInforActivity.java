@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,47 +29,27 @@ public class OfferInforActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBar();
         setContentView(R.layout.offer_info);
         gestureDetectorCompat = new GestureDetectorCompat(this, new OfferInforGestureListener());
 
+        setTitle(getResources().getString(R.string.offer_info_title));
 
+        // ドキュメントID取得
         Bundle bundle = getIntent().getExtras();
         String docID = bundle.getString("document_id", "");
 
-        TextView tv = (TextView) findViewById(R.id.u2_title);
+        // 表示ドキュメント取得
         Document doc = ((IjobApplication) getApplication()).database.getDocument(docID);
 
-        String scrolltext = "";
-        for (int i = 0; i < 10; i++) {
-            scrolltext = scrolltext + String.valueOf(doc.getProperties());
-        }
-        tv.setText("DocID:" + docID + "\n" + String.valueOf(doc.getProperties()) + " \n" + "   Scroll:" + scrolltext);
-
-
-    }
-
-    // ActionBar [back]button
-    private void setActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(getResources().getString(R.string.offer_info_title));
+        ListView infoList = (ListView) findViewById(R.id.u2_info_list);
+                String[] members = { doc.getProperty("offer_name").toString(), doc.getProperty("offer_term").toString(), doc.getProperty("offer_info").toString(), doc.getProperties().toString()};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplication(),
+                android.R.layout.simple_expandable_list_item_1, members);
+        infoList.setDividerHeight(0);
+        infoList.setAdapter(adapter);
 
     }
 
-    // メニューが選択された時の処理
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // addしたときのIDで識別
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return true;
-        }
-    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

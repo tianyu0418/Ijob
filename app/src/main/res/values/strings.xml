@@ -15,6 +15,11 @@
 
     <string name="offer_info_title">求人概要</string>
 
+    <string name="offer_search_type">職種</string>
+    <string name="offer_search_salary">収入</string>
+    <string name="offer_search_address">勤務地</string>
+    <string name="offer_search_other">その他</string>
+
     <string name="application">応募する</string>
     <string name="bookmark">検討中リストに追加する</string>
 

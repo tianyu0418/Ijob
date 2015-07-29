@@ -121,7 +121,7 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
         }
 
         Query query = view.createQuery();
-        query.setDescending(true);
+        query.setDescending(true);// Order the key
 
         QueryEnumerator rows = null;
         try {
@@ -141,7 +141,6 @@ public class NewestPagerFragment extends CommonFragment implements SwipeRefreshL
             Document doc = row.getDocument();
             Log.e("STYLOG", " NewestPagerFragment getQuery:"+ " i: " + i + "  Doc:" + String.valueOf(doc.getProperties()));
         }
-
 
         return query;
     }

@@ -52,9 +52,11 @@ public class OfferSearchFragment extends CommonFragment{
             }
         });
 
+        /* */
+
         /*　検索ボックス */
         EditText editText = (EditText)rootView.findViewById(R.id.u3_offer_search_box);
-        editText.setHint("");
+        editText.setHint("任意ワードを入力してください。");
         InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(rootView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 

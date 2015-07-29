@@ -3,19 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:id="@+id/u2_scroll"
+
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/u2_bookmark">
-
-
-        <TextView
-            android:id="@+id/u2_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+        android:layout_above="@+id/u2_bookmark"
+        android:id="@+id/u2_info_list"
+        />
 
     <!-- 空の View -->
     <View

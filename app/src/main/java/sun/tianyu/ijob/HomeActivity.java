@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ import sun.tianyu.ijob.controllers.newest.NewestFragment;
 import sun.tianyu.ijob.controllers.search.OfferSearchFragment;
 
 
-public class HomeActivity extends CommonActivity
+public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -97,6 +99,9 @@ public class HomeActivity extends CommonActivity
 //        createAllDocument(((IjobApplication) getApplication()).database);
         // Test Code
         outputAllDocs(((IjobApplication) getApplication()).database);
+
+        // MapReduce Test
+        testMapReduce();
     }
 
     // Test Code
@@ -125,7 +130,6 @@ public class HomeActivity extends CommonActivity
         } catch (CouchbaseLiteException e) {
             Log.e(TAG, "Error putting", e);
         }
-
 
         return documentId;
     }
@@ -231,6 +235,13 @@ public class HomeActivity extends CommonActivity
         return documentId;
     }
 
+    // Test Code
+    private void testMapReduce() {
+        Query q = getQuery(((IjobApplication) getApplication()).database,  0);
+
+
+    }
+
     private void outputAllDocs (Database database) {
         // Query all document
         Query query = database.createAllDocumentsQuery();
@@ -325,6 +336,67 @@ public class HomeActivity extends CommonActivity
         } catch (CouchbaseLiteException e) {
             Log.e(TAG, "Error putting", e);
         }
+    }
+
+    // Test Code
+    private Query getQuery(Database database, final int category_num) {
+        com.couchbase.lite.View view = database.getView("distinct_test");
+        if (view.getMap() == null) {
+            view.setMapReduce(new Mapper() {
+                @Override
+                public void map(Map<String, Object> document, Emitter emitter) {
+                    java.util.List<Object> values = new ArrayList<Object>();
+                    values.add(document.get("offer_type"));
+                    emitter.emit("type", values);
+                }
+            }, new Reducer() {
+                @Override
+                public Object reduce(List<Object> keys, List<Object> values, boolean rereduce) {
+                    List list = new ArrayList<String>();
+                    for (int i=0; i<keys.size(); i++) {
+                    }
+                    for (int j=0; j<values.size(); j++) {
+                        if (!list.contains(String.valueOf(values.get(j)))) {
+                            list.add(String.valueOf(values.get(j)));
+                        }
+                    }
+                    int count;
+                    if (list != null) {
+                        count = list.size();
+                    } else {
+                        count = 0;
+                    }
+                    Log.e("STYLOG", " list size: " + list.size());
+                    return list;
+                }
+            }, "2");
+        }
+
+        Query query = view.createQuery();
+        query.setDescending(true);
+
+        QueryEnumerator rows = null;
+        try {
+            rows = query.run();
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+            Log.e("STYLOG", " Exception: "+e);
+        }
+
+        if (rows.getCount() == 0) {
+            Log.e("STYLOG", "Data null");
+        }
+
+        int rowsCount = rows.getCount();
+        for (int i=0; i<rowsCount; i++) {
+            QueryRow row = rows.getRow(i);
+            Document doc = row.getDocument();
+            List<String> type = (List<String>) row.getValue();
+            Log.e("STYLOG", " NewestPagerFragment getQuery:"+ " i: " + i + "  Doc:" + String.valueOf(type));
+        }
+
+
+        return query;
     }
 
     @Override
