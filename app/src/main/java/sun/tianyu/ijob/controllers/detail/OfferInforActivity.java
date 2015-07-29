@@ -42,9 +42,14 @@ public class OfferInforActivity extends CommonActivity {
         Document doc = ((IjobApplication) getApplication()).database.getDocument(docID);
 
         ListView infoList = (ListView) findViewById(R.id.u2_info_list);
-                String[] members = { doc.getProperty("offer_name").toString(), doc.getProperty("offer_term").toString(), doc.getProperty("offer_info").toString(), doc.getProperties().toString()};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplication(),
-                android.R.layout.simple_expandable_list_item_1, members);
+
+
+        // リストビューアダプターを設置
+//        String[] members = { doc.getProperty("offer_name").toString(), doc.getProperty("offer_term").toString(), doc.getProperty("offer_info").toString(), doc.getProperties().toString()};
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplication(),
+//                android.R.layout.simple_expandable_list_item_1, members);
+        OfferInfoListAdapter adapter = new OfferInfoListAdapter(getApplication(), doc);
+
         infoList.setDividerHeight(0);
         infoList.setAdapter(adapter);
 
@@ -58,8 +63,6 @@ public class OfferInforActivity extends CommonActivity {
     }
 
     class OfferInforGestureListener extends GestureDetector.SimpleOnGestureListener {
-        //handle 'swipe left' action only
-
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {

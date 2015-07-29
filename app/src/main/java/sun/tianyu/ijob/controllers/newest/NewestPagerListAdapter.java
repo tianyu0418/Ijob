@@ -81,7 +81,7 @@ public class NewestPagerListAdapter extends LiveQueryAdapter {
         TextView titletext = (TextView) convertView.findViewById(R.id.u1_title);
         titletext.setText(String.valueOf(job.getProperty("offer_name")));
         TextView infoText = (TextView) convertView.findViewById(R.id.u1_info);
-        infoText.setText(String.valueOf(job.getProperty("offer_info")));
+        infoText.setText(String.valueOf(job.getProperty("offer_info") != null ? job.getProperty("offer_info") : ""));
 
             /*
             If there are conflicting revisions, show a conflict icon.

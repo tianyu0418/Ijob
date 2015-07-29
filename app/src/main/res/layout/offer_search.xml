@@ -17,7 +17,7 @@
             android:layout_marginRight="5dp"
             android:textSize="17sp"
             android:textColor="#f0ffffff"
-            android:background="@drawable/offer_info_button_blue"
+            android:background="@drawable/offer_search_button_blue"
             android:text="@string/offer_search_type" />
         <!--収入-->
         <Button
@@ -31,7 +31,7 @@
             android:layout_marginRight="5dp"
             android:textSize="17dp"
             android:textColor="#f0ffffff"
-            android:background="@drawable/offer_info_button_red"
+            android:background="@drawable/offer_search_button_blue"
             android:text="@string/offer_search_salary" />
         </LinearLayout>
 
@@ -51,7 +51,7 @@
             android:layout_marginRight="5dp"
             android:textSize="17sp"
             android:textColor="#f0ffffff"
-            android:background="@drawable/offer_info_button_blue"
+            android:background="@drawable/offer_search_button_blue"
             android:text="@string/offer_search_address" />
 
         <!--その他-->
@@ -66,7 +66,7 @@
             android:layout_marginRight="5dp"
             android:textSize="17dp"
             android:textColor="#f0ffffff"
-            android:background="@drawable/offer_info_button_red"
+            android:background="@drawable/offer_search_button_blue"
             android:text="@string/offer_search_other"/>
 
     </LinearLayout>
@@ -74,7 +74,7 @@
 
     <!--free word-->
     <TextView
-        android:id="@+id/u3_keywork_title"
+        android:id="@+id/u3_keyword_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="キーワード"

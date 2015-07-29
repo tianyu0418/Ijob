@@ -9,7 +9,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/u2_bookmark"
+        android:layout_marginTop="10dp"
         android:id="@+id/u2_info_list"
+        android:clickable="false"
+        android:listSelector="@android:color/transparent"
+        android:focusableInTouchMode="false"
         />
 
     <!-- 空の View -->

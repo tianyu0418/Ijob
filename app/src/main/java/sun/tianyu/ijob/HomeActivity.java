@@ -96,7 +96,7 @@ public class HomeActivity extends ActionBarActivity
     }
 
     private void helloCBL() {
-//        createAllDocument(((IjobApplication) getApplication()).database);
+        createAllDocument(((IjobApplication) getApplication()).database);
         // Test Code
         outputAllDocs(((IjobApplication) getApplication()).database);
 
@@ -217,7 +217,7 @@ public class HomeActivity extends ActionBarActivity
         Document document5 = database.createDocument();
         String documentId5 = document5.getId();
         Map<String, Object> map5 = new HashMap<String, Object>();
-        map5.put("offer_id", "1");
+        map5.put("offer_id", "5");
         map5.put("doc_type", "1");
         map5.put("offer_name", "iOS 開発者");
         map5.put("offer_type", "2");
@@ -227,6 +227,23 @@ public class HomeActivity extends ActionBarActivity
         try {
             // Save the properties to the document
             document5.putProperties(map5);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Error putting", e);
+        }
+
+        Document document6 = database.createDocument();
+        String documentId6 = document6.getId();
+        Map<String, Object> map6 = new HashMap<String, Object>();
+        map6.put("offer_id", "6");
+        map6.put("doc_type", "1");
+        map6.put("offer_name", "とりあえず、Nullに設定がある");
+        map6.put("offer_type", "2");
+        map6.put("created_at", currentTimeString);
+//        map5.put("offer_info", );
+        map6.put("offer_term", "2015年8月 ~ 2015年12月");
+        try {
+            // Save the properties to the document
+            document6.putProperties(map6);
         } catch (CouchbaseLiteException e) {
             Log.e(TAG, "Error putting", e);
         }

@@ -10,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import sun.tianyu.ijob.HomeActivity;
@@ -52,8 +50,6 @@ public class OfferSearchFragment extends CommonFragment{
             }
         });
 
-        /* */
-
         /*　検索ボックス */
         EditText editText = (EditText)rootView.findViewById(R.id.u3_offer_search_box);
         editText.setHint("任意ワードを入力してください。");
@@ -87,10 +83,7 @@ public class OfferSearchFragment extends CommonFragment{
             }
         });
 
-
         return rootView;
-
-
     }
 
     @Override
